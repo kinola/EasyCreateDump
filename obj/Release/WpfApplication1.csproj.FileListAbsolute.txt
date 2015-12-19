@@ -1,0 +1,6 @@
+C:\Users\nicolasd\Source\Repos\WpfApplication1\bin\Release\WpfApplication1.exe.config
+C:\Users\nicolasd\Source\Repos\WpfApplication1\obj\Release\Resources\Icons.baml
+C:\Users\nicolasd\Source\Repos\WpfApplication1\obj\Release\App.baml
+C:\Users\nicolasd\Source\Repos\WpfApplication1\obj\Release\Resources\Icons.g.cs
+C:\Users\nicolasd\Source\Repos\WpfApplication1\obj\Release\App.g.cs
+C:\Users\nicolasd\Source\Repos\WpfApplication1\obj\Release\WpfApplication1_MarkupCompile.cache

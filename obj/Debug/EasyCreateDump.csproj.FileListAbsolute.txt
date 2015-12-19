@@ -1,0 +1,3 @@
+C:\Users\nicolasd\Source\Repos\EasyCreateDump\bin\Debug\WpfApplication1.exe.config
+C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\WpfApplication1.exe
+C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\WpfApplication1.pdb
