@@ -57,11 +57,19 @@ namespace WpfApplication1
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            connectionString.Text = ConfigurationManager.AppSettings["connectionString"];
-            LoadCombobox(true);
+            SetTools();
+            SetCombobox(true);
         }
 
-        private async void LoadCombobox(bool firstLoad)
+        private void SetTools()
+        {
+            connectionString.Text = ConfigurationManager.AppSettings["connectionString"];
+            textBoxServeur.Text = connectionString.Text.Split(';')[0].Replace("server=", string.Empty);
+            textBoxLogin.Text = connectionString.Text.Split(';')[1].Replace("user=", string.Empty);
+            textBoxPassword.Text = connectionString.Text.Split(';')[2].Replace("pwd=", string.Empty);
+        }
+
+        private async void SetCombobox(bool firstLoad)
         {
             var connString = connectionString.Text;
             MySqlConnection connection = null;
@@ -99,9 +107,15 @@ namespace WpfApplication1
             connection.Close();
         }
 
+        private void SetConnectionString()
+        {
+            connectionString.Text = string.Format("server={0};user={1};pwd={2}", textBoxServeur.Text, textBoxLogin.Text, textBoxPassword.Text);
+        }
+
         private void ButtonClicked(object sender, RoutedEventArgs e)
         {
-            LoadCombobox(false);
+            SetConnectionString();
+            SetCombobox(false);
         }
 
         private void ToolsClicked(object sender, RoutedEventArgs e)

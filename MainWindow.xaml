@@ -60,12 +60,12 @@
                 <Grid Background="#FFE5E5E5" Margin="2,0,-2,-230">
                     <Button x:Name="button" Click="ButtonClicked" Content="Check and Change" HorizontalAlignment="Left" Height="25" Margin="286,170,0,0" VerticalAlignment="Top" Width="114"/>
                     <StackPanel HorizontalAlignment="Left" Height="261" Margin="10,10,0,0" VerticalAlignment="Top" Width="390">
-                        <Label x:Name="label2" Content="Serveur"/>
-                        <TextBox x:Name="textBox" Height="23" TextWrapping="Wrap" Controls:TextBoxHelper.ClearTextButton="True"/>
-                        <Label x:Name="label3" Content="Login"/>
-                        <TextBox x:Name="textBox1" Height="23" TextWrapping="Wrap" Controls:TextBoxHelper.ClearTextButton="True"/>
-                        <Label x:Name="label4" Content="Password"/>
-                        <TextBox x:Name="textBox2" Height="23" TextWrapping="Wrap" Controls:TextBoxHelper.ClearTextButton="True"/>
+                        <Label x:Name="labelServeur" Content="Serveur"/>
+                        <TextBox x:Name="textBoxServeur" Height="23" TextWrapping="Wrap" Controls:TextBoxHelper.ClearTextButton="True"/>
+                        <Label x:Name="labelLogin" Content="Login"/>
+                        <TextBox x:Name="textBoxLogin" Height="23" TextWrapping="Wrap" Controls:TextBoxHelper.ClearTextButton="True"/>
+                        <Label x:Name="labelPassword" Content="Password"/>
+                        <TextBox x:Name="textBoxPassword" Height="23" TextWrapping="Wrap" Controls:TextBoxHelper.ClearTextButton="True"/>
                     </StackPanel>
                     <TextBox x:Name="connectionString" Controls:TextBoxHelper.ClearTextButton="True" Margin="10,200,10,94" IsEnabled="false" />
                     <Label x:Name="label" Content="ConnectionString" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>

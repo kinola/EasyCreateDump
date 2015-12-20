@@ -1,5 +1,5 @@
 -- MySqlBackup.NET 2.0.9.2
--- Dump Time: 2015-12-20 08:47:39
+-- Dump Time: 2015-12-20 10:38:41
 -- --------------------------------------
 -- Server version 5.6.17 MySQL Community Server (GPL)
 
@@ -47,5 +47,5 @@ CREATE TABLE IF NOT EXISTS `qsdmljqlskdq` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 
--- Dump completed on 2015-12-20 08:47:39
--- Total time: 0:0:0:0:140 (d:h:m:s:ms)
+-- Dump completed on 2015-12-20 10:38:41
+-- Total time: 0:0:0:0:89 (d:h:m:s:ms)
