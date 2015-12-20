@@ -12,6 +12,7 @@ using System.Threading;
 using System.ComponentModel;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace WpfApplication1
 {
@@ -48,6 +49,8 @@ namespace WpfApplication1
                     task.Wait();
 
                     await this.ShowMessageAsync("Validation", "Export terminé dans le répertoire courant");
+
+                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory);
                 }
             }
         }
@@ -99,6 +102,11 @@ namespace WpfApplication1
         private void ButtonClicked(object sender, RoutedEventArgs e)
         {
             LoadCombobox(false);
+        }
+
+        private void ToolsClicked(object sender, RoutedEventArgs e)
+        {
+            tabControl.SelectedIndex = 2;
         }
     }
 }
