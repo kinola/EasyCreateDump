@@ -52,7 +52,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Patch">
-                <Grid Background="#FFE5E5E5" Margin="2,0,-2,-219"/>
+                <Grid Background="#FFE5E5E5" Margin="2,0,-2,-219">
+                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="240" Width="390"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Tools">
                 <Grid Background="#FFE5E5E5" Margin="2,0,-2,-230">
@@ -65,7 +67,7 @@
                         <Label x:Name="label4" Content="Password"/>
                         <TextBox x:Name="textBox2" Height="23" TextWrapping="Wrap" Controls:TextBoxHelper.ClearTextButton="True"/>
                     </StackPanel>
-                    <TextBox x:Name="connectionString" Controls:TextBoxHelper.ClearTextButton="True" Margin="10,200,10,94" />
+                    <TextBox x:Name="connectionString" Controls:TextBoxHelper.ClearTextButton="True" Margin="10,200,10,94" IsEnabled="false" />
                     <Label x:Name="label" Content="ConnectionString" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
