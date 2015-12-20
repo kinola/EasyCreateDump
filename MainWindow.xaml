@@ -10,7 +10,8 @@
         BorderThickness="0" 
         GlowBrush="Black"
         ResizeMode="CanResizeWithGrip"
-        ShowIconOnTitleBar="False"
+        Icon="Resources/appbar.database.sql.png"
+        ShowIconOnTitleBar="True"
         WindowTransitionsEnabled="False"
         WindowStartupLocation="CenterScreen" Height="414.737" Width="439.438" Loaded="MetroWindow_Loaded">
     <Window.Resources>
@@ -20,20 +21,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Controls:MetroWindow.RightWindowCommands>
-        <Controls:WindowCommands>
-            <Button>
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_apple}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <Button Margin="4 0 0 0" VerticalAlignment="Center" Content="Outils" Click="ToolsClicked" />
-                </StackPanel>
-            </Button>
-        </Controls:WindowCommands>
-    </Controls:MetroWindow.RightWindowCommands>
     <Grid Margin="0,0,2,51" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="33*"/>
@@ -53,7 +40,10 @@
             </TabItem>
             <TabItem Header="Patch">
                 <Grid Background="#FFE5E5E5" Margin="2,0,-2,-219">
+                    <StackPanel HorizontalAlignment="Left" Height="290" Margin="10,10,0,0" VerticalAlignment="Top" Width="390"/>
                     <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="240" Width="390"/>
+                    <Button x:Name="buttonRefresh" Click="ButtonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="325,255,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="buttonExport" Click="ButtonExport" Content="Export" HorizontalAlignment="Left" Margin="10,255,0,0" VerticalAlignment="Top" Width="75"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Tools">

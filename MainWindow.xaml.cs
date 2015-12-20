@@ -58,7 +58,54 @@ namespace WpfApplication1
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             SetTools();
+            SetDatagrid();
             SetCombobox(true);
+        }
+
+        private void SetDatagrid()
+        {
+            var connString = connectionString.Text;
+            MySqlConnection connection = null;
+
+            try
+            {
+                connection = new MySqlConnection(connString);
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+
+            using (MySqlCommand commandSql = new MySqlCommand())
+            {
+                commandSql.Connection = connection;
+                try
+                {
+                    var datatableAll = QueryExpress.GetTable(commandSql, "show databases");
+                    datatableAll.Columns.Add("SQL command");
+                    for (int i = 0; i < datatableAll.Rows.Count; i++)
+                    {
+                        datatableAll.Rows[i][1] = string.Format("SELECT * FROM {0}", datatableAll.Rows[i][0]);
+                    }
+                    dataGrid.ItemsSource = datatableAll.DefaultView;
+                }
+                catch (MySqlException)
+                {
+                    return;
+                }
+            }
+
+            connection.Close();
+        }
+
+        private void ButtonRefresh(object sender, RoutedEventArgs e)
+        {
+            SetDatagrid();
+        }
+
+        private void ButtonExport(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void SetTools()

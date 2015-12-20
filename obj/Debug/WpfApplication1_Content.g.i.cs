@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("mainwindow.xaml")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/appbar.database.sql.png")]
 
 
