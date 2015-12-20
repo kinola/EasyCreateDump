@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:WpfApplication1"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="Creer un dump d'une base AES"
-        BorderThickness="0" 
-        GlowBrush="Black"
+        Title="DOCAPOST - Easy Create Dump"
+        BorderThickness="1" 
+        GlowBrush="Blue"
         ResizeMode="CanResizeWithGrip"
         Icon="Resources/appbar.database.sql.png"
         ShowIconOnTitleBar="True"
-        WindowTransitionsEnabled="False"
+        WindowTransitionsEnabled="True"
         WindowStartupLocation="CenterScreen" Height="414.737" Width="439.438" Loaded="MetroWindow_Loaded">
     <Window.Resources>
         <ResourceDictionary>
@@ -41,7 +41,8 @@
             <TabItem Header="Patch">
                 <Grid Background="#FFE5E5E5" Margin="2,0,-2,-219">
                     <StackPanel HorizontalAlignment="Left" Height="290" Margin="10,10,0,0" VerticalAlignment="Top" Width="390"/>
-                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="240" Width="390"/>
+                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="240" Width="390" CanUserAddRows="false">
+                    </DataGrid>
                     <Button x:Name="buttonRefresh" Click="ButtonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="325,255,0,0" VerticalAlignment="Top" Width="75"/>
                     <Button x:Name="buttonExport" Click="ButtonExport" Content="Export" HorizontalAlignment="Left" Margin="10,255,0,0" VerticalAlignment="Top" Width="75"/>
                 </Grid>

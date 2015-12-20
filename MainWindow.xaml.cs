@@ -13,6 +13,8 @@ using System.ComponentModel;
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace WpfApplication1
 {
@@ -81,13 +83,18 @@ namespace WpfApplication1
                 commandSql.Connection = connection;
                 try
                 {
-                    var datatableAll = QueryExpress.GetTable(commandSql, "show databases");
-                    datatableAll.Columns.Add("SQL command");
-                    for (int i = 0; i < datatableAll.Rows.Count; i++)
+                    var datatableDatas = QueryExpress.GetTable(commandSql, "show databases");
+                    var datatableAll = new DataTable();
+
+                    datatableAll.Columns.Add("Choice", typeof(Boolean));
+                    datatableAll.Columns.Add("Database", typeof(string));
+                    datatableAll.Columns.Add("SQL command", typeof(string));
+
+                    for (int i = 0; i < datatableDatas.Rows.Count; i++)
                     {
-                        datatableAll.Rows[i][1] = string.Format("SELECT * FROM {0}", datatableAll.Rows[i][0]);
+                        datatableAll.Rows.Add(true, datatableDatas.Rows[i][0], string.Format("SELECT * FROM {0}", datatableDatas.Rows[i][0]));
                     }
-                    dataGrid.ItemsSource = datatableAll.DefaultView;
+                    dataGrid.ItemsSource = datatableAll.AsDataView();
                 }
                 catch (MySqlException)
                 {
@@ -97,6 +104,7 @@ namespace WpfApplication1
 
             connection.Close();
         }
+        
 
         private void ButtonRefresh(object sender, RoutedEventArgs e)
         {

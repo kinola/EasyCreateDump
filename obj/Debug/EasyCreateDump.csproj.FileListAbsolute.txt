@@ -26,3 +26,4 @@ C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\WpfApplication1.Properti
 C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\EasyCreateDump.csproj.GenerateResource.Cache
 C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\WpfApplication1.exe
 C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\WpfApplication1.pdb
+C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\EasyCreateDump.csprojResolveAssemblyReference.cache
