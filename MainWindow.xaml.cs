@@ -15,6 +15,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace WpfApplication1
 {
@@ -28,50 +29,71 @@ namespace WpfApplication1
             InitializeComponent();
         }
 
-        private async void ComboBoxSelectionChanged(object sender, EventArgs e)
+        private void ComboBoxSelectionChanged(object sender, EventArgs e)
         {
-            string connectionStringTemp = connectionString.Text;
-
             var value = comboBox.Text;
 
             if (!string.IsNullOrEmpty(value))
             {
-                var controller = await this.ShowMessageAsync("Confirmation", string.Format("Vous allez lancer le DUMP sur {0} ?", value), MessageDialogStyle.AffirmativeAndNegative);
-                if (controller == MessageDialogResult.Affirmative)
+                LaunchBackup(value);
+            }
+        }
+
+        private void ComboBoxDatabaseSelectionChanged(object sender, EventArgs e)
+        {
+            var value = comboBoxDatabase.Text;
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                SetDatagrid(value);
+            }
+        }
+
+        private async void LaunchBackup(string value, [Optional]Dictionary<string, string> dictionaryTables)
+        {
+            string connectionStringTemp = connectionString.Text;
+
+            var controller = await this.ShowMessageAsync("Confirmation", string.Format("Vous allez lancer le DUMP sur {0} ?", value), MessageDialogStyle.AffirmativeAndNegative);
+            if (controller == MessageDialogResult.Affirmative)
+            {
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+                Task task = Task.Factory.StartNew(() =>
                 {
-                    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                    CancellationToken cancellationToken = cancellationTokenSource.Token;
-
-                    Task task = Task.Factory.StartNew(() =>
+                    var back = new Backup(string.Join(connectionStringTemp, string.Format("database={0};", value), ";"), Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, string.Format("{0}.sql", value)));
+                    if (dictionaryTables == null)
                     {
-                        var back = new Backup(string.Join(connectionStringTemp, string.Format("database={0};", value), ";"), Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, string.Format("{0}.sql", value)));
                         back.GenerateBackup();
-                    }, cancellationToken);
+                    }
+                    else
+                    {
+                        back.GenerateBackup(dictionaryTables);
+                    }
+                }, cancellationToken);
 
-                    task.Wait();
+                task.Wait();
 
-                    await this.ShowMessageAsync("Validation", "Export terminé dans le répertoire courant");
+                await this.ShowMessageAsync("Validation", "Export terminé dans le répertoire courant");
 
-                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory);
-                }
+                Process.Start(System.AppDomain.CurrentDomain.BaseDirectory);
             }
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             SetTools();
-            SetDatagrid();
             SetCombobox(true);
         }
 
-        private void SetDatagrid()
+        private void SetDatagrid(string value)
         {
             var connString = connectionString.Text;
             MySqlConnection connection = null;
 
             try
             {
-                connection = new MySqlConnection(connString);
+                connection = new MySqlConnection(string.Format("{0};database={1}", connString, value));
             }
             catch (ArgumentException)
             {
@@ -83,11 +105,11 @@ namespace WpfApplication1
                 commandSql.Connection = connection;
                 try
                 {
-                    var datatableDatas = QueryExpress.GetTable(commandSql, "show databases");
+                    var datatableDatas = QueryExpress.GetTable(commandSql, "show tables");
                     var datatableAll = new DataTable();
 
                     datatableAll.Columns.Add("Choice", typeof(Boolean));
-                    datatableAll.Columns.Add("Database", typeof(string));
+                    datatableAll.Columns.Add("Tables", typeof(string));
                     datatableAll.Columns.Add("SQL command", typeof(string));
 
                     for (int i = 0; i < datatableDatas.Rows.Count; i++)
@@ -104,16 +126,17 @@ namespace WpfApplication1
 
             connection.Close();
         }
-        
-
-        private void ButtonRefresh(object sender, RoutedEventArgs e)
-        {
-            SetDatagrid();
-        }
 
         private void ButtonExport(object sender, RoutedEventArgs e)
         {
+            Dictionary<string, string> dicoToExport = new Dictionary<string, string>();
 
+            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
+            {
+                dicoToExport.Add(dr[1].ToString(), dr[2].ToString());
+            }
+
+            LaunchBackup(comboBoxDatabase.Text, dicoToExport);
         }
 
         private void SetTools()
@@ -146,6 +169,7 @@ namespace WpfApplication1
                 {
                     var datatableAll = QueryExpress.GetTable(commandSql, "show databases");
                     comboBox.ItemsSource = datatableAll.DefaultView;
+                    comboBoxDatabase.ItemsSource = datatableAll.DefaultView;
                 }
                 catch (MySqlException)
                 {
@@ -171,11 +195,6 @@ namespace WpfApplication1
         {
             SetConnectionString();
             SetCombobox(false);
-        }
-
-        private void ToolsClicked(object sender, RoutedEventArgs e)
-        {
-            tabControl.SelectedIndex = 2;
         }
     }
 }

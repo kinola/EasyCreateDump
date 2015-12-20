@@ -39,12 +39,13 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Patch">
-                <Grid Background="#FFE5E5E5" Margin="2,0,-2,-219">
+                <Grid Background="#FFE5E5E5" Margin="2,0,-2,-232">
                     <StackPanel HorizontalAlignment="Left" Height="290" Margin="10,10,0,0" VerticalAlignment="Top" Width="390"/>
-                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="240" Width="390" CanUserAddRows="false">
+                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="240" Width="390" CanUserAddRows="false">
                     </DataGrid>
-                    <Button x:Name="buttonRefresh" Click="ButtonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="325,255,0,0" VerticalAlignment="Top" Width="75"/>
-                    <Button x:Name="buttonExport" Click="ButtonExport" Content="Export" HorizontalAlignment="Left" Margin="10,255,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="buttonExport" Click="ButtonExport" Content="Export" HorizontalAlignment="Left" Margin="10,288,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Label x:Name="label2" Content="Choisir une base de données" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="comboBoxDatabase" ItemsSource="{Binding}" DisplayMemberPath="Database" DropDownClosed="ComboBoxDatabaseSelectionChanged" HorizontalAlignment="Left" Margin="178,10,0,0" VerticalAlignment="Top" Width="222"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Tools">

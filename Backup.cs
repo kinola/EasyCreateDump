@@ -115,5 +115,31 @@ namespace AesPackageFromScratch
                 }
             }
         }
+
+        public void GenerateBackup(Dictionary<string, string> dictionaryTables)
+        {
+            using (MySqlCommand commandSql = new MySqlCommand())
+            {
+                using (MySqlBackup backup = new MySqlBackup(commandSql))
+                {
+                    commandSql.Connection = connexion;
+                    var datatableAll = QueryExpress.GetTable(commandSql, "SHOW FULL TABLES");
+                    backup.ExportInfo.TablesToBeExportedDic = dictionaryTables;
+
+                    try
+                    {
+                        backup.ExportToFile(FileBackup);
+                    }
+                    catch (Exception exc)
+                    {
+                        throw new Exception(string.Format("Impossible de générer l'export dans le fichier demandé ({0}) : {1}", FileBackup, exc.Message));
+                    }
+                    finally
+                    {
+                        connexion.Close();
+                    }
+                }
+            }
+        }
     }
 }
