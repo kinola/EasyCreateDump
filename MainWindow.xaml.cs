@@ -19,9 +19,6 @@ using System.Runtime.InteropServices;
 
 namespace WpfApplication1
 {
-    /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : MetroWindow
     {
         public MainWindow()
@@ -29,14 +26,25 @@ namespace WpfApplication1
             InitializeComponent();
         }
 
-        private void ComboBoxSelectionChanged(object sender, EventArgs e)
+        private void ButtonClicked(object sender, RoutedEventArgs e)
         {
-            var value = comboBox.Text;
+            SetConnectionString();
+            SetCombobox(false);
+        }
 
-            if (!string.IsNullOrEmpty(value))
+        private void ButtonExport(object sender, RoutedEventArgs e)
+        {
+            var dicoToExport = new Dictionary<string, string>();
+
+            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
             {
-                LaunchBackup(value);
+                if ((bool)dr[0])
+                {
+                    dicoToExport.Add(dr[1].ToString(), dr[2].ToString());
+                }
             }
+
+            LaunchBackup(comboBoxDatabase.Text, dicoToExport);
         }
 
         private void ComboBoxDatabaseSelectionChanged(object sender, EventArgs e)
@@ -49,34 +57,46 @@ namespace WpfApplication1
             }
         }
 
+        private void ComboBoxSelectionChanged(object sender, EventArgs e)
+        {
+            var value = comboBox.Text;
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                LaunchBackup(value);
+            }
+        }
+
         private async void LaunchBackup(string value, [Optional]Dictionary<string, string> dictionaryTables)
         {
-            string connectionStringTemp = connectionString.Text;
+            var connectionStringTemp = connectionString.Text;
 
             var controller = await this.ShowMessageAsync("Confirmation", string.Format("Vous allez lancer le DUMP sur {0} ?", value), MessageDialogStyle.AffirmativeAndNegative);
             if (controller == MessageDialogResult.Affirmative)
             {
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                CancellationToken cancellationToken = cancellationTokenSource.Token;
-
-                Task task = Task.Factory.StartNew(() =>
+                using (var cancellationTokenSource = new CancellationTokenSource())
                 {
-                    var back = new Backup(string.Join(connectionStringTemp, string.Format("database={0};", value), ";"), Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, string.Format("{0}.sql", value)));
-                    if (dictionaryTables == null)
+                    var cancellationToken = cancellationTokenSource.Token;
+
+                    var task = Task.Factory.StartNew(() =>
                     {
-                        back.GenerateBackup();
-                    }
-                    else
-                    {
-                        back.GenerateBackup(dictionaryTables);
-                    }
-                }, cancellationToken);
+                        var back = new Backup(string.Join(connectionStringTemp, string.Format("database={0};", value), ";"), Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, string.Format("{0}.sql", value)));
+                        if (dictionaryTables == null)
+                        {
+                            back.GenerateBackup();
+                        }
+                        else
+                        {
+                            back.GenerateBackup(dictionaryTables);
+                        }
+                    }, cancellationToken);
 
-                task.Wait();
+                    task.Wait();
 
-                await this.ShowMessageAsync("Validation", "Export terminé dans le répertoire courant");
+                    await this.ShowMessageAsync("Validation", "Export terminé dans le répertoire courant");
 
-                Process.Start(System.AppDomain.CurrentDomain.BaseDirectory);
+                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory);
+                }
             }
         }
 
@@ -84,67 +104,6 @@ namespace WpfApplication1
         {
             SetTools();
             SetCombobox(true);
-        }
-
-        private void SetDatagrid(string value)
-        {
-            var connString = connectionString.Text;
-            MySqlConnection connection = null;
-
-            try
-            {
-                connection = new MySqlConnection(string.Format("{0};database={1}", connString, value));
-            }
-            catch (ArgumentException)
-            {
-                return;
-            }
-
-            using (MySqlCommand commandSql = new MySqlCommand())
-            {
-                commandSql.Connection = connection;
-                try
-                {
-                    var datatableDatas = QueryExpress.GetTable(commandSql, "show tables");
-                    var datatableAll = new DataTable();
-
-                    datatableAll.Columns.Add("Choice", typeof(Boolean));
-                    datatableAll.Columns.Add("Tables", typeof(string));
-                    datatableAll.Columns.Add("SQL command", typeof(string));
-
-                    for (int i = 0; i < datatableDatas.Rows.Count; i++)
-                    {
-                        datatableAll.Rows.Add(true, datatableDatas.Rows[i][0], string.Format("SELECT * FROM {0}", datatableDatas.Rows[i][0]));
-                    }
-                    dataGrid.ItemsSource = datatableAll.AsDataView();
-                }
-                catch (MySqlException)
-                {
-                    return;
-                }
-            }
-
-            connection.Close();
-        }
-
-        private void ButtonExport(object sender, RoutedEventArgs e)
-        {
-            Dictionary<string, string> dicoToExport = new Dictionary<string, string>();
-
-            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
-            {
-                dicoToExport.Add(dr[1].ToString(), dr[2].ToString());
-            }
-
-            LaunchBackup(comboBoxDatabase.Text, dicoToExport);
-        }
-
-        private void SetTools()
-        {
-            connectionString.Text = ConfigurationManager.AppSettings["connectionString"];
-            textBoxServeur.Text = connectionString.Text.Split(';')[0].Replace("server=", string.Empty);
-            textBoxLogin.Text = connectionString.Text.Split(';')[1].Replace("user=", string.Empty);
-            textBoxPassword.Text = connectionString.Text.Split(';')[2].Replace("pwd=", string.Empty);
         }
 
         private async void SetCombobox(bool firstLoad)
@@ -184,6 +143,7 @@ namespace WpfApplication1
             }
 
             connection.Close();
+            connection.Dispose();
         }
 
         private void SetConnectionString()
@@ -191,10 +151,72 @@ namespace WpfApplication1
             connectionString.Text = string.Format("server={0};user={1};pwd={2}", textBoxServeur.Text, textBoxLogin.Text, textBoxPassword.Text);
         }
 
-        private void ButtonClicked(object sender, RoutedEventArgs e)
+        private void SetDatagrid(string value)
         {
-            SetConnectionString();
-            SetCombobox(false);
+            var connString = connectionString.Text;
+            MySqlConnection connection = null;
+
+            try
+            {
+                connection = new MySqlConnection(string.Format("{0};database={1}", connString, value));
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+
+            using (MySqlCommand commandSql = new MySqlCommand())
+            {
+                commandSql.Connection = connection;
+                try
+                {
+                    var datatableDatas = QueryExpress.GetTable(commandSql, "show tables");
+                    using (var datatableAll = new DataTable())
+                    {
+                        datatableAll.Columns.Add("Choice", typeof(Boolean));
+                        datatableAll.Columns.Add("Tables", typeof(string));
+                        datatableAll.Columns.Add("SQL command", typeof(string));
+
+                        for (int i = 0; i < datatableDatas.Rows.Count; i++)
+                        {
+                            datatableAll.Rows.Add(true, datatableDatas.Rows[i][0], string.Format("SELECT * FROM {0}", datatableDatas.Rows[i][0]));
+                        }
+
+                        dataGrid.ItemsSource = datatableAll.AsDataView();
+                    }
+                }
+                catch (MySqlException)
+                {
+                    return;
+                }
+            }
+
+            connection.Close();
+            connection.Dispose();
+        }
+
+        private void SetTools()
+        {
+            connectionString.Text = ConfigurationManager.AppSettings["connectionString"];
+            textBoxServeur.Text = connectionString.Text.Split(';')[0].Replace("server=", string.Empty);
+            textBoxLogin.Text = connectionString.Text.Split(';')[1].Replace("user=", string.Empty);
+            textBoxPassword.Text = connectionString.Text.Split(';')[2].Replace("pwd=", string.Empty);
+        }
+
+        private void SelectYes(object sender, RoutedEventArgs e)
+        {
+            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
+            {
+                dr[0] = false;
+            }
+        }
+
+        private void SelectNo(object sender, RoutedEventArgs e)
+        {
+            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
+            {
+                dr[0] = true;
+            }
         }
     }
 }

@@ -63,12 +63,12 @@ namespace AesPackageFromScratch
             }
         }
 
-        private List<string> GetListToExclude()
+        private static List<string> GetListToExclude()
         {
             return new List<string>(ConfigurationManager.AppSettings["tablesToExclude"].Split(new char[] { ';' }));
         }
 
-        private Dictionary<string, string> GetDictionaryTables(DataTable datatableAll)
+        private static Dictionary<string, string> GetDictionaryTables(DataTable datatableAll)
         {
             var listToExclude = GetListToExclude();
             var dictionaryTables = new Dictionary<string, string>();
@@ -97,7 +97,7 @@ namespace AesPackageFromScratch
                 {
                     commandSql.Connection = connexion;
                     var datatableAll = QueryExpress.GetTable(commandSql, "SHOW FULL TABLES");
-                    Dictionary<string, string> dictionaryTables = GetDictionaryTables(datatableAll);
+                    var dictionaryTables = GetDictionaryTables(datatableAll);
                     backup.ExportInfo.TablesToBeExportedDic = dictionaryTables;
 
                     try
