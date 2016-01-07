@@ -29,7 +29,7 @@ namespace WpfApplication1
         private void ButtonClicked(object sender, RoutedEventArgs e)
         {
             SetConnectionString();
-            SetCombobox(false);
+            SetComboboxAsync(false);
         }
 
         private void ButtonExport(object sender, RoutedEventArgs e)
@@ -44,7 +44,7 @@ namespace WpfApplication1
                 }
             }
 
-            LaunchBackup(comboBoxDatabase.Text, dicoToExport);
+            LaunchBackupAsync(comboBoxDatabase.Text, dicoToExport);
         }
 
         private void ComboBoxDatabaseSelectionChanged(object sender, EventArgs e)
@@ -63,15 +63,15 @@ namespace WpfApplication1
 
             if (!string.IsNullOrEmpty(value))
             {
-                LaunchBackup(value);
+                LaunchBackupAsync(value);
             }
         }
 
-        private async void LaunchBackup(string value, [Optional]Dictionary<string, string> dictionaryTables)
+        private async void LaunchBackupAsync(string value, [Optional]Dictionary<string, string> dictionaryTables)
         {
             var connectionStringTemp = connectionString.Text;
 
-            var controller = await this.ShowMessageAsync("Confirmation", string.Format("Vous allez lancer le DUMP sur {0} ?", value), MessageDialogStyle.AffirmativeAndNegative);
+            var controller = await this.ShowMessageAsync("Confirmation", $"Vous allez lancer le DUMP sur {value} ?", MessageDialogStyle.AffirmativeAndNegative);
             if (controller == MessageDialogResult.Affirmative)
             {
                 using (var cancellationTokenSource = new CancellationTokenSource())
@@ -80,7 +80,7 @@ namespace WpfApplication1
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var back = new Backup(string.Join(connectionStringTemp, string.Format("database={0};", value), ";"), Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, string.Format("{0}.sql", value)));
+                        var back = new Backup(string.Join(connectionStringTemp, $"database={value};", ";"), Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"{value}.sql"));
                         if (dictionaryTables == null)
                         {
                             back.GenerateBackup();
@@ -103,10 +103,10 @@ namespace WpfApplication1
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             SetTools();
-            SetCombobox(true);
+            SetComboboxAsync(true);
         }
 
-        private async void SetCombobox(bool firstLoad)
+        private async void SetComboboxAsync(bool firstLoad)
         {
             var connString = connectionString.Text;
             MySqlConnection connection = null;
@@ -148,7 +148,7 @@ namespace WpfApplication1
 
         private void SetConnectionString()
         {
-            connectionString.Text = string.Format("server={0};user={1};pwd={2}", textBoxServeur.Text, textBoxLogin.Text, textBoxPassword.Text);
+            connectionString.Text = $"server={textBoxServeur.Text};user={textBoxLogin.Text};pwd={textBoxPassword.Text}";
         }
 
         private void SetDatagrid(string value)
@@ -158,7 +158,7 @@ namespace WpfApplication1
 
             try
             {
-                connection = new MySqlConnection(string.Format("{0};database={1}", connString, value));
+                connection = new MySqlConnection($"{connString};database={value}");
             }
             catch (ArgumentException)
             {
@@ -179,7 +179,7 @@ namespace WpfApplication1
 
                         for (int i = 0; i < datatableDatas.Rows.Count; i++)
                         {
-                            datatableAll.Rows.Add(true, datatableDatas.Rows[i][0], string.Format("SELECT * FROM {0}", datatableDatas.Rows[i][0]));
+                            datatableAll.Rows.Add(true, datatableDatas.Rows[i][0], $"SELECT * FROM {datatableDatas.Rows[i][0]}");
                         }
 
                         dataGrid.ItemsSource = datatableAll.AsDataView();
@@ -197,7 +197,7 @@ namespace WpfApplication1
 
         private void SetTools()
         {
-            connectionString.Text = ConfigurationManager.AppSettings["connectionString"];
+            connectionString.Text = ConfigurationManager.AppSettings[nameof(connectionString)];
             textBoxServeur.Text = connectionString.Text.Split(';')[0].Replace("server=", string.Empty);
             textBoxLogin.Text = connectionString.Text.Split(';')[1].Replace("user=", string.Empty);
             textBoxPassword.Text = connectionString.Text.Split(';')[2].Replace("pwd=", string.Empty);
