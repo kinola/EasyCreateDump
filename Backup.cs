@@ -36,7 +36,7 @@ namespace AesPackageFromScratch
         }
         private string fileBackup = string.Empty;
 
-        private MySqlConnection connexion = null;
+        private MySqlConnection connexion;
 
         public Backup()
         {
@@ -59,16 +59,16 @@ namespace AesPackageFromScratch
             }
             catch (MySqlException exc)
             {
-                throw new Exception(string.Format("Impossible d'ouvrir une connexion ({0}) : {1}", ConnexionString, exc.Message));
+                throw new Exception($"Impossible d'ouvrir une connexion ({ConnexionString}) : {exc.Message}");
             }
         }
 
-        private List<string> GetListToExclude()
+        private static List<string> GetListToExclude()
         {
             return new List<string>(ConfigurationManager.AppSettings["tablesToExclude"].Split(new char[] { ';' }));
         }
 
-        private Dictionary<string, string> GetDictionaryTables(DataTable datatableAll)
+        private static Dictionary<string, string> GetDictionaryTables(DataTable datatableAll)
         {
             var listToExclude = GetListToExclude();
             var dictionaryTables = new Dictionary<string, string>();
@@ -78,11 +78,11 @@ namespace AesPackageFromScratch
                 var table = datatableAll.Rows[i][0].ToString();
                 if (!listToExclude.Where(x => table.StartsWith(x)).ToList().Any())
                 {
-                    dictionaryTables.Add(table, string.Format("SELECT * FROM `{0}`", table));
+                    dictionaryTables.Add(table, $"SELECT * FROM `{table}`");
                 }
                 else
                 {
-                    dictionaryTables.Add(table, string.Format("SELECT * FROM `{0}` where enreg=0", table));
+                    dictionaryTables.Add(table, $"SELECT * FROM `{table}` where enreg=0");
                 }
             }
 
@@ -97,7 +97,7 @@ namespace AesPackageFromScratch
                 {
                     commandSql.Connection = connexion;
                     var datatableAll = QueryExpress.GetTable(commandSql, "SHOW FULL TABLES");
-                    Dictionary<string, string> dictionaryTables = GetDictionaryTables(datatableAll);
+                    var dictionaryTables = GetDictionaryTables(datatableAll);
                     backup.ExportInfo.TablesToBeExportedDic = dictionaryTables;
 
                     try
@@ -106,7 +106,7 @@ namespace AesPackageFromScratch
                     }
                     catch (Exception exc)
                     {
-                        throw new Exception(string.Format("Impossible de générer l'export dans le fichier demandé ({0}) : {1}", FileBackup, exc.Message));
+                        throw new Exception($"Impossible de générer l'export dans le fichier demandé ({FileBackup}) : {exc.Message}");
                     }
                     finally
                     {
@@ -132,7 +132,7 @@ namespace AesPackageFromScratch
                     }
                     catch (Exception exc)
                     {
-                        throw new Exception(string.Format("Impossible de générer l'export dans le fichier demandé ({0}) : {1}", FileBackup, exc.Message));
+                        throw new Exception($"Impossible de générer l'export dans le fichier demandé ({FileBackup}) : {exc.Message}");
                     }
                     finally
                     {
