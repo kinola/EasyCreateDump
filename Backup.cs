@@ -12,11 +12,12 @@ namespace AesPackageFromScratch
     public class Backup
     {
         private string connexionString = string.Empty;
+
         public string ConnexionString
         {
             get
             {
-                return connexionString;
+                return this.connexionString;
             }
 
             set
@@ -24,11 +25,12 @@ namespace AesPackageFromScratch
                 this.connexionString = value;
             }
         }
+
         public string FileBackup
         {
             get
             {
-                return fileBackup;
+                return this.fileBackup;
             }
 
             set
@@ -36,32 +38,28 @@ namespace AesPackageFromScratch
                 this.fileBackup = value;
             }
         }
+
         private string fileBackup = string.Empty;
 
         private MySqlConnection connexion;
 
-        public Backup()
-        {
-
-        }
-
         public Backup(string connexionString, string fileBackup)
         {
-            ConnexionString = connexionString;
-            InitConnexion();
-            FileBackup = fileBackup;
+            this.ConnexionString = connexionString;
+            this.InitConnexion();
+            this.FileBackup = fileBackup;
         }
 
         private void InitConnexion()
         {
-            connexion = new MySqlConnection(ConnexionString);
+            this.connexion = new MySqlConnection(this.ConnexionString);
             try
             {
-                connexion.Open();
+                this.connexion.Open();
             }
             catch (MySqlException exc)
             {
-                throw new Exception($"Impossible d'ouvrir une connexion ({ConnexionString}) : {exc.Message}");
+                throw new Exception($"Impossible d'ouvrir une connexion ({this.ConnexionString}) : {exc.Message}");
             }
         }
 
@@ -105,14 +103,14 @@ namespace AesPackageFromScratch
             {
                 using (MySqlBackup backup = new MySqlBackup(commandSql))
                 {
-                    commandSql.Connection = connexion;
+                    commandSql.Connection = this.connexion;
                     var datatableAll = QueryExpress.GetTable(commandSql, "SHOW FULL TABLES");
                     var dictionaryTables = GetDictionaryTables(datatableAll);
                     backup.ExportInfo.TablesToBeExportedDic = dictionaryTables;
 
                     try
                     {
-                        backup.ExportToFile(FileBackup);
+                        backup.ExportToFile(this.FileBackup);
                     }
                     catch (Exception exc)
                     {
@@ -120,10 +118,10 @@ namespace AesPackageFromScratch
                     }
                     finally
                     {
-                        connexion.Close();
+                        this.connexion.Close();
                     }
 
-                    DeleteComments(FileBackup);
+                    DeleteComments(this.FileBackup);
                 }
             }
         }
@@ -134,17 +132,17 @@ namespace AesPackageFromScratch
             {
                 using (MySqlBackup backup = new MySqlBackup(commandSql))
                 {
-                    commandSql.Connection = connexion;
+                    commandSql.Connection = this.connexion;
                     var datatableAll = QueryExpress.GetTable(commandSql, "SHOW FULL TABLES");
                     backup.ExportInfo.TablesToBeExportedDic = dictionaryTables;
 
                     try
                     {
-                        backup.ExportToFile(FileBackup);
+                        backup.ExportToFile(this.FileBackup);
                     }
                     catch (Exception exc)
                     {
-                        throw new Exception($"Impossible de générer l'export dans le fichier demandé ({FileBackup}) : {exc.Message}");
+                        throw new Exception($"Impossible de générer l'export dans le fichier demandé ({this.FileBackup}) : {exc.Message}");
                     }
                     finally
                     {

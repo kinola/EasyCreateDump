@@ -1,21 +1,17 @@
-﻿using MySql.Data.MySqlClient;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using AesPackageFromScratch;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System.Data;
-using System.Configuration;
-using System.Threading.Tasks;
-using AesPackageFromScratch;
-using System.Threading;
-using System.ComponentModel;
+using MySql.Data.MySqlClient;
 using System;
-using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfApplication1
 {
@@ -23,13 +19,13 @@ namespace WpfApplication1
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void ButtonClicked(object sender, RoutedEventArgs e)
         {
-            SetConnectionString();
-            SetComboboxAsync(false);
+            this.SetConnectionString();
+            this.SetComboboxAsync(false);
         }
 
         private void ButtonExport(object sender, RoutedEventArgs e)
@@ -44,7 +40,7 @@ namespace WpfApplication1
                 }
             }
 
-            LaunchBackupAsync(comboBoxDatabase.Text, dicoToExport);
+            this.LaunchBackupAsync(comboBoxDatabase.Text, dicoToExport);
         }
 
         private void ComboBoxDatabaseSelectionChanged(object sender, EventArgs e)
@@ -53,7 +49,7 @@ namespace WpfApplication1
 
             if (!string.IsNullOrEmpty(value))
             {
-                SetDatagrid(value);
+                this.SetDatagrid(value);
             }
         }
 
@@ -63,7 +59,7 @@ namespace WpfApplication1
 
             if (!string.IsNullOrEmpty(value))
             {
-                LaunchBackupAsync(value);
+                this.LaunchBackupAsync(value);
             }
         }
 
@@ -102,8 +98,8 @@ namespace WpfApplication1
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            SetTools();
-            SetComboboxAsync(true);
+            this.SetTools();
+            this.SetComboboxAsync(true);
         }
 
         private async void SetComboboxAsync(bool firstLoad)
