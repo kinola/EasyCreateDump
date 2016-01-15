@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace AesPackageFromScratch
 {
@@ -89,6 +91,14 @@ namespace AesPackageFromScratch
             return dictionaryTables;
         }
 
+        public static void DeleteComments(string file)
+        {
+            var lines = File.ReadAllLines(file).Where(a => !a.StartsWith("/*!")).ToList();
+            File.WriteAllLines($"{file}_rpl", lines);
+            File.Delete(file);
+            File.Move($"{file}_rpl", file);
+        }
+
         public void GenerateBackup()
         {
             using (MySqlCommand commandSql = new MySqlCommand())
@@ -112,6 +122,8 @@ namespace AesPackageFromScratch
                     {
                         connexion.Close();
                     }
+
+                    DeleteComments(FileBackup);
                 }
             }
         }
