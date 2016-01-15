@@ -36,7 +36,7 @@ namespace AesPackageFromScratch
         }
         private string fileBackup = string.Empty;
 
-        private MySqlConnection connexion = null;
+        private MySqlConnection connexion;
 
         public Backup()
         {
@@ -59,7 +59,7 @@ namespace AesPackageFromScratch
             }
             catch (MySqlException exc)
             {
-                throw new Exception(string.Format("Impossible d'ouvrir une connexion ({0}) : {1}", ConnexionString, exc.Message));
+                throw new Exception($"Impossible d'ouvrir une connexion ({ConnexionString}) : {exc.Message}");
             }
         }
 
@@ -78,11 +78,11 @@ namespace AesPackageFromScratch
                 var table = datatableAll.Rows[i][0].ToString();
                 if (!listToExclude.Where(x => table.StartsWith(x)).ToList().Any())
                 {
-                    dictionaryTables.Add(table, string.Format("SELECT * FROM `{0}`", table));
+                    dictionaryTables.Add(table, $"SELECT * FROM `{table}`");
                 }
                 else
                 {
-                    dictionaryTables.Add(table, string.Format("SELECT * FROM `{0}` where enreg=0", table));
+                    dictionaryTables.Add(table, $"SELECT * FROM `{table}` where enreg=0");
                 }
             }
 
@@ -106,7 +106,7 @@ namespace AesPackageFromScratch
                     }
                     catch (Exception exc)
                     {
-                        throw new Exception(string.Format("Impossible de générer l'export dans le fichier demandé ({0}) : {1}", FileBackup, exc.Message));
+                        throw new Exception($"Impossible de générer l'export dans le fichier demandé ({FileBackup}) : {exc.Message}");
                     }
                     finally
                     {
@@ -132,7 +132,7 @@ namespace AesPackageFromScratch
                     }
                     catch (Exception exc)
                     {
-                        throw new Exception(string.Format("Impossible de générer l'export dans le fichier demandé ({0}) : {1}", FileBackup, exc.Message));
+                        throw new Exception($"Impossible de générer l'export dans le fichier demandé ({FileBackup}) : {exc.Message}");
                     }
                     finally
                     {
