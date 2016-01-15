@@ -100,6 +100,7 @@ namespace WpfApplication1
         {
             this.SetTools();
             this.SetComboboxAsync(true);
+            this.SetTextblock();
         }
 
         private void SelectNo(object sender, RoutedEventArgs e)
@@ -117,6 +118,8 @@ namespace WpfApplication1
                 dr[0] = false;
             }
         }
+
+
 
         private async void SetComboboxAsync(bool firstLoad)
         {
@@ -213,6 +216,12 @@ namespace WpfApplication1
             textBoxServeur.Text = connectionString.Text.Split(';')[0].Replace("server=", string.Empty);
             textBoxLogin.Text = connectionString.Text.Split(';')[1].Replace("user=", string.Empty);
             textBoxPassword.Text = connectionString.Text.Split(';')[2].Replace("pwd=", string.Empty);
+        }
+
+        private void SetTextblock()
+        {
+            var listTablesExcluded = ConfigurationManager.AppSettings["tablesToExclude"].Split(';');
+            textBlock.Text = string.Join(Environment.NewLine, listTablesExcluded);
         }
     }
 }

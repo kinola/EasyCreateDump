@@ -13,7 +13,7 @@
         Icon="Resources/appbar.database.sql.png"
         ShowIconOnTitleBar="True"
         WindowTransitionsEnabled="True"
-        WindowStartupLocation="CenterScreen" Height="498.737" Width="605.438" Loaded="MetroWindow_Loaded">
+        WindowStartupLocation="CenterScreen" Height="498.737" Width="640.438" Loaded="MetroWindow_Loaded">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -33,9 +33,11 @@
         </Grid.ColumnDefinitions>
         <TabControl x:Name="tabControl" Margin="10,9,3,15" Grid.RowSpan="2" Grid.ColumnSpan="2">
             <TabItem Header="Scratch">
-                <Grid Background="#FFE5E5E5" Margin="2,2,5,-224">
+                <Grid Background="#FFE5E5E5" Margin="4,2,3,-224">
                     <Label x:Name="label1" Content=":-) Sélectionner une base pour lancer un Dump" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="26" Width="292"/>
-                    <ComboBox x:Name="comboBox" ItemsSource="{Binding}" DropDownClosed="ComboBoxSelectionChanged" DisplayMemberPath="Database" Margin="10,36,0,297" HorizontalAlignment="Left" Width="282"/>
+                    <ComboBox x:Name="comboBox" ItemsSource="{Binding}" DropDownClosed="ComboBoxSelectionChanged" DisplayMemberPath="Database" Margin="10,36,0,286" HorizontalAlignment="Left" Width="282"/>
+                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,105,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" RenderTransformOrigin="-0.26,0.688" Height="233" Width="545"/>
+                    <Label x:Name="label3" Content=":-) Liste des tables dont les données seront exclues du DUMP" HorizontalAlignment="Left" Margin="0,74,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.895,0.269"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Patch">
