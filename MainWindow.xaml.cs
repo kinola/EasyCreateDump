@@ -102,6 +102,22 @@ namespace WpfApplication1
             this.SetComboboxAsync(true);
         }
 
+        private void SelectNo(object sender, RoutedEventArgs e)
+        {
+            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
+            {
+                dr[0] = true;
+            }
+        }
+
+        private void SelectYes(object sender, RoutedEventArgs e)
+        {
+            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
+            {
+                dr[0] = false;
+            }
+        }
+
         private async void SetComboboxAsync(bool firstLoad)
         {
             var connString = connectionString.Text;
@@ -197,22 +213,6 @@ namespace WpfApplication1
             textBoxServeur.Text = connectionString.Text.Split(';')[0].Replace("server=", string.Empty);
             textBoxLogin.Text = connectionString.Text.Split(';')[1].Replace("user=", string.Empty);
             textBoxPassword.Text = connectionString.Text.Split(';')[2].Replace("pwd=", string.Empty);
-        }
-
-        private void SelectYes(object sender, RoutedEventArgs e)
-        {
-            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
-            {
-                dr[0] = false;
-            }
-        }
-
-        private void SelectNo(object sender, RoutedEventArgs e)
-        {
-            foreach (System.Data.DataRowView dr in dataGrid.ItemsSource)
-            {
-                dr[0] = true;
-            }
         }
     }
 }

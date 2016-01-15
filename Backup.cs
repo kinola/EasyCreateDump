@@ -146,7 +146,7 @@ namespace AesPackageFromScratch
                     }
                     finally
                     {
-                        connexion.Close();
+                        this.connexion.Close();
                     }
                 }
             }
