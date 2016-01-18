@@ -9,7 +9,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using MahApps.Metro.Controls;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -30,7 +29,6 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
-using WpfApplication1;
 
 
 
@@ -52,7 +50,7 @@ public partial class resources_icons_xaml : System.Windows.ResourceDictionary, S
             return;
         }
         _contentLoaded = true;
-        System.Uri resourceLocater = new System.Uri("/WpfApplication1;component/resources/icons.xaml", System.UriKind.Relative);
+        System.Uri resourceLocater = new System.Uri("/EasyCreateDump;component/resources/icons.xaml", System.UriKind.Relative);
         
         #line 1 "..\..\..\Resources\Icons.xaml"
         System.Windows.Application.LoadComponent(this, resourceLocater);
