@@ -76,7 +76,7 @@ namespace WpfApplication1
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var back = new Backup(string.Join(connectionStringTemp, $"database={value};", ";"), Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"{value}.sql"));
+                        var back = new Backup(string.Join(connectionStringTemp, $"database={value};", ";"), Path.Combine(textBoxRepertoireSortie.Text, $"{value}.sql"));
                         if (dictionaryTables == null)
                         {
                             back.GenerateBackup();
@@ -91,7 +91,7 @@ namespace WpfApplication1
 
                     await this.ShowMessageAsync("Validation", "Export terminé dans le répertoire courant");
 
-                    Process.Start(System.AppDomain.CurrentDomain.BaseDirectory);
+                    Process.Start(textBoxRepertoireSortie.Text);
                 }
             }
         }
@@ -118,8 +118,6 @@ namespace WpfApplication1
                 dr[0] = false;
             }
         }
-
-
 
         private async void SetComboboxAsync(bool firstLoad)
         {
@@ -216,12 +214,29 @@ namespace WpfApplication1
             textBoxServeur.Text = connectionString.Text.Split(';')[0].Replace("server=", string.Empty);
             textBoxLogin.Text = connectionString.Text.Split(';')[1].Replace("user=", string.Empty);
             textBoxPassword.Text = connectionString.Text.Split(';')[2].Replace("pwd=", string.Empty);
+            textBoxRepertoireSortie.Text = System.AppDomain.CurrentDomain.BaseDirectory;
         }
 
         private void SetTextblock()
         {
             var listTablesExcluded = ConfigurationManager.AppSettings["tablesToExclude"].Split(';');
             textBlock.Text = string.Join(Environment.NewLine, listTablesExcluded);
+        }
+
+        private void comboBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                this.ComboBoxSelectionChanged(new object(), new EventArgs());
+            }
+        }
+
+        private void comboBoxDatabase_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                this.ComboBoxDatabaseSelectionChanged(new object(), new EventArgs());
+            }
         }
     }
 }

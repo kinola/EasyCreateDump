@@ -35,7 +35,7 @@
             <TabItem Header="Scratch">
                 <Grid Background="#FFE5E5E5" Margin="4,2,3,-224">
                     <Label x:Name="label1" Content=":-) Sélectionner une base pour lancer un Dump" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="26" Width="292"/>
-                    <ComboBox x:Name="comboBox" ItemsSource="{Binding}" DropDownClosed="ComboBoxSelectionChanged" DisplayMemberPath="Database" Margin="10,36,0,286" HorizontalAlignment="Left" Width="282"/>
+                    <ComboBox x:Name="comboBox" IsEditable="True" ItemsSource="{Binding}" DropDownClosed="ComboBoxSelectionChanged" DisplayMemberPath="Database" Margin="10,36,0,286" HorizontalAlignment="Left" Width="282" KeyDown="comboBox_KeyDown"/>
                     <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,105,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" RenderTransformOrigin="-0.26,0.688" Height="233" Width="545"/>
                     <Label x:Name="label3" Content=":-) Liste des tables dont les données seront exclues du DUMP" HorizontalAlignment="Left" Margin="0,74,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.895,0.269"/>
                 </Grid>
@@ -47,7 +47,7 @@
                     <Button x:Name="buttonExport" Click="ButtonExport" Content="Export" HorizontalAlignment="Left" Margin="10,0,0,15" VerticalAlignment="Bottom" Width="75"/>
                     <Controls:ToggleSwitch HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Content="Unselect All" Checked="SelectYes" Unchecked="SelectNo" FontFamily="Tahoma" FontSize="11"/>
                     <Label x:Name="label2" Content="Choisir une base de données" Margin="173,16,255,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="comboBoxDatabase" ItemsSource="{Binding}" DisplayMemberPath="Database" DropDownClosed="ComboBoxDatabaseSelectionChanged" Margin="0,13,12,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="222"/>
+                    <ComboBox x:Name="comboBoxDatabase" IsEditable="True" ItemsSource="{Binding}" DisplayMemberPath="Database" DropDownClosed="ComboBoxDatabaseSelectionChanged" Margin="0,13,12,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="222" KeyDown="comboBoxDatabase_KeyDown"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Tools">
@@ -63,6 +63,8 @@
                     </StackPanel>
                     <TextBox x:Name="connectionString" Controls:TextBoxHelper.ClearTextButton="True" Margin="10,200,10,94" IsEnabled="false" />
                     <Label x:Name="label" Content="ConnectionString" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="textBoxRepertoireSortie" Height="23" Margin="10,294,10,36" TextWrapping="Wrap" Text="TextBox"/>
+                    <Label x:Name="label4" Content="Répertoire de sortie" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>
