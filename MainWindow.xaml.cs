@@ -73,10 +73,12 @@ namespace WpfApplication1
                 using (var cancellationTokenSource = new CancellationTokenSource())
                 {
                     var cancellationToken = cancellationTokenSource.Token;
+                    var outDirectory = textBoxRepertoireSortie.Text;
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var back = new Backup(string.Join(connectionStringTemp, $"database={value};", ";"), Path.Combine(textBoxRepertoireSortie.Text, $"{value}.sql"));
+                        var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+                        var back = new Backup(string.Join(connectionStringTemp, $"database={value};", ";"), Path.Combine(outDirectory, $"{value}_{timeStamp}.sql"));
                         if (dictionaryTables == null)
                         {
                             back.GenerateBackup();
@@ -91,7 +93,7 @@ namespace WpfApplication1
 
                     await this.ShowMessageAsync("Validation", "Export terminé dans le répertoire courant");
 
-                    Process.Start(textBoxRepertoireSortie.Text);
+                    Process.Start(outDirectory);
                 }
             }
         }
