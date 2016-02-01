@@ -21,3 +21,5 @@ C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\EasyCreateDump.g.resourc
 C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\EasyCreateDump.Properties.Resources.resources
 C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\EasyCreateDump.exe
 C:\Users\nicolasd\Source\Repos\EasyCreateDump\obj\Debug\EasyCreateDump.pdb
+C:\Users\nicolasd\Source\Repos\EasyCreateDump\bin\Debug\MaterialDesignColors.dll
+C:\Users\nicolasd\Source\Repos\EasyCreateDump\bin\Debug\MaterialDesignThemes.Wpf.dll
